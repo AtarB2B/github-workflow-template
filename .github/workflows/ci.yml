@@ -2,15 +2,6 @@ name: "Continuous Integration"
 
 on:
   workflow_call:
-  push:
-    branches:
-      - 'fc/**'
-      - 'feature/**'
-      - 'release/**'
-      - 'main'
-  # pull_request:
-  #   types:
-  #     - opened
 
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
