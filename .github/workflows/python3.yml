@@ -52,6 +52,8 @@ jobs:
         uses: AtarB2B/github-sonar-scan-workflow@main
         with:
           github-repo-name: ${{ github.event.repository.name }}
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+          SONAR_TOKEN: ${{env.SONAR_TOKEN}}
   
   release-candidate:
     if: ${{ startsWith(github.ref, 'refs/heads/fc') }}
