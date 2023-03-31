@@ -40,7 +40,7 @@ jobs:
         uses: AtarB2B/github-fc-deploy-workflow@main
         with:
           DEPLOY_ENV: "dev"
-          SVC_NAME: ${{github.repository}}
+          SVC_NAME: ${{ github.event.repository.name }}
   
   rc-deploy:
     runs-on: ubuntu-latest
@@ -57,7 +57,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
           DEPLOY_ENV: "dev"
-          SVC_NAME: ${{github.repository}}
+          SVC_NAME: ${{ github.event.repository.name }}
   
   prod-deploy:
     runs-on: ubuntu-latest
@@ -74,4 +74,4 @@ jobs:
         with:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
           DEPLOY_ENV: "prod-atar"
-          SVC_NAME: ${{github.repository}}
+          SVC_NAME: ${{ github.event.repository.name }}

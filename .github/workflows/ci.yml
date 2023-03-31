@@ -39,4 +39,4 @@ jobs:
       - name: Run Sonar Scanner
         uses: AtarB2B/github-sonar-scan-workflow@main
         with:
-          github-repo-name: devops-labs
+          github-repo-name: ${{ github.event.repository.name }}
