@@ -48,7 +48,6 @@ jobs:
           ssh-keyscan -H github.com >> /root/.ssh/known_hosts
           chmod +x ./update_library.sh && ./update_library.sh -s
           cat ./library/requirements.txt >> requirements.txt
-        shell: bash
 
       - name: Install dependencies
         run: |
@@ -56,7 +55,6 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           if [ -f development/requirements.txt ]; then pip install -r development/requirements.txt; fi
           if [ -f library/requirements.txt ]; then pip install -r library/requirements.txt; fi
-        shell: bash
 
       - name: Run Unit Tests
         uses: AtarB2B/github-unit-tests-workflow@main
