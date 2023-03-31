@@ -37,7 +37,7 @@ jobs:
       - name: Update Library
         uses: AtarB2B/github-library-workflow@main
         with:
-          SSH_PRIV_KEY_LIBRARY: ${{ inputs.SSH_PRIV_KEY_LIBRARY }}
+          SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
 
       - name: Install dependencies
         run: |
@@ -50,7 +50,7 @@ jobs:
       - name: Run Unit Tests
         uses: AtarB2B/github-unit-tests-workflow@main
         with:
-          SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
+          SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
   
   sonar-scan:
     runs-on: ubuntu-latest
