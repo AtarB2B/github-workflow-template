@@ -48,12 +48,25 @@ jobs:
     needs: unit-test
     continue-on-error: true
     steps:
-      - name: Run Sonar Scanner
-        uses: AtarB2B/github-sonar-scan-workflow@main
-        with:
-          github-repo-name: ${{ github.event.repository.name }}
-          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-          SONAR_TOKEN: ${{env.SONAR_TOKEN}}
+        - uses: actions/checkout@v3
+        
+        - name: Download code coverage results
+          uses: actions/download-artifact@v3
+
+        - name: "Move coverage file to correct folder"
+          run: sed -i 's+/home/runner/work/${{ inputs.github-repo-name }}/${{ inputs.github-repo-name }}+/github/workspace+g' htmlcov/index.html
+          shell: bash
+
+        - uses: SonarSource/sonarcloud-github-action@master
+          env:
+            GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+            SONAR_TOKEN: ${{ inputs.SONAR_TOKEN }}      
+      # - name: Run Sonar Scanner
+      #   uses: AtarB2B/github-sonar-scan-workflow@main
+      #   with:
+      #     github-repo-name: ${{ github.event.repository.name }}
+      #     GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+      #     SONAR_TOKEN: ${{env.SONAR_TOKEN}}
   
   release-candidate:
     if: ${{ startsWith(github.ref, 'refs/heads/fc') }}
