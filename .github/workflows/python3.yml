@@ -46,6 +46,8 @@ jobs:
           mkdir ~/.ssh && touch ~/.ssh/known_hosts
           eval $(ssh-agent) && ssh-add ssh-rsa.key
           ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+          pwd
+          ls -lah
           chmod +x ./update_library.sh && ./update_library.sh -s
 
       - name: Install dependencies
