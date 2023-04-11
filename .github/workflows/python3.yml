@@ -100,19 +100,19 @@ jobs:
           DEPLOY_ENV: "dev"
           SVC_NAME: ${{ github.event.repository.name }}
   
-  # prod-deploy:
-  #   runs-on: ubuntu-latest
-  #   environment: prod-atar
-  #   if: ${{ startsWith(github.ref, 'refs/heads/main') }}
-  #   container:
-  #     image: ghcr.io/atarb2b/deploy-devops:latest
-  #     credentials:
-  #       username: ${{github.repository_owner}}
-  #       password: ${{env.GITHUB_TOKEN}}
-  #   steps:
-  #     - name: Flow Deploy
-  #       uses: AtarB2B/github-create-tag-workflow@main
-  #       with:
-  #         GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-  #         DEPLOY_ENV: "prod-atar"
-  #         SVC_NAME: ${{ github.event.repository.name }}
+  prod-deploy:
+    runs-on: ubuntu-latest
+    environment: prod-atar
+    if: ${{ startsWith(github.ref, 'refs/heads/main') }}
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{env.GITHUB_TOKEN}}
+    steps:
+      - name: Flow Deploy
+        uses: AtarB2B/github-create-tag-workflow@main
+        with:
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+          DEPLOY_ENV: "prod-atar"
+          SVC_NAME: ${{ github.event.repository.name }}
