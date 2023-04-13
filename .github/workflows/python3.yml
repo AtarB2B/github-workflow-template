@@ -2,6 +2,8 @@ name: "Continuous Integration"
 
 on:
   workflow_call:
+  schedule:
+  - cron: '24 10 * * *'
 
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -121,8 +123,8 @@ jobs:
 
   prod-schedule-deploy:
     runs-on: ubuntu-latest
-    environment: prod-atar
-    if: ${{ startsWith(github.ref, 'refs/heads/main') }}
+    environment: production-porto
+    if: ${{ startsWith(github.ref, 'refs/heads/main') && github.event.schedule == '24 10 * * *' }}
     container:
       image: ghcr.io/atarb2b/deploy-devops:latest
       credentials:
