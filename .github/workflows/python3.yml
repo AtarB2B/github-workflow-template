@@ -2,8 +2,6 @@ name: "Continuous Integration"
 
 on:
   workflow_call:
-  schedule:
-  - cron: '24 10 * * *'
 
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
