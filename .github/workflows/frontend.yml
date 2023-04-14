@@ -8,7 +8,6 @@ env:
   REPO_NAME: ${{github.event.repository.name}}
   SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
   SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
-  SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
 
   ATAR_PROJECT: ${{secrets.ATAR_PROJECT_ID_PROD}}
   ATAR_CREDENTIALS: ${{secrets.ATAR_CREDENTIALS_PROD}}
@@ -26,7 +25,6 @@ jobs:
         username: ${{github.repository_owner}}
         password: ${{env.GITHUB_TOKEN}}
     steps:
-
       - name: Create feature candidate
         uses: AtarB2B/github-create-fc-workflow@main
   
@@ -60,11 +58,6 @@ jobs:
         username: ${{github.repository_owner}}
         password: ${{env.GITHUB_TOKEN}}
     steps:
-      - name: Update Library
-        uses: AtarB2B/github-library-workflow@main
-        with:
-          SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
-
       - name: Flow Deploy
         uses: AtarB2B/github-fc-deploy-workflow@main
         with:
