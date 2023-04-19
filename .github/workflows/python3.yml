@@ -87,7 +87,7 @@ jobs:
           cat ./library/requirements.txt >> requirements.txt
       
       - name: Install Reqs
-        run: pip install -r library/requirements.txt || echo "Sem dependências para instalar"
+        run: pip install -r requirements.txt || echo "Sem dependências para instalar"
 
       - name: Flow Deploy
         uses: AtarB2B/github-fc-deploy-workflow@main
