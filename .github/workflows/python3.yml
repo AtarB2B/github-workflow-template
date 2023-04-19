@@ -78,6 +78,9 @@ jobs:
       #   with:
       #     SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
       
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Update Library
         run: |
           echo "${{secrets.SSH_PRIV_KEY_LIBRARY}}" > ssh-rsa.key
@@ -108,6 +111,9 @@ jobs:
       #   uses: AtarB2B/github-library-workflow@main
       #   with:
       #     SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
+
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Update Library
         run: |
