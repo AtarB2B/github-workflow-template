@@ -85,6 +85,12 @@ jobs:
           ssh-keyscan -H github.com >> /root/.ssh/known_hosts
           chmod +x ./update_library.sh && ./update_library.sh -b main
           cat ./library/requirements.txt >> requirements.txt
+      
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
+      - run: pip install -r requirements.txt
 
       - name: Flow Deploy
         uses: AtarB2B/github-fc-deploy-workflow@main
