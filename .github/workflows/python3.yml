@@ -86,12 +86,15 @@ jobs:
           chmod +x ./update_library.sh && ./update_library.sh -b main
           cat ./library/requirements.txt >> requirements.txt
       
-      - name: Setup python
-        uses: actions/setup-python@v1
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '2.7' # install the python version needed
 
-      - name: Install Reqs
+      - name: install python packages
         run: |
-          pip install -r requirements.txt || echo "Sem dependências para instalar"
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Flow Deploy
         uses: AtarB2B/github-fc-deploy-workflow@main
