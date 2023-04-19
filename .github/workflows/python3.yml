@@ -73,23 +73,10 @@ jobs:
         username: ${{github.repository_owner}}
         password: ${{env.GITHUB_TOKEN}}
     steps:
-      # - name: Update Library
-      #   uses: AtarB2B/github-library-workflow@main
-      #   with:
-      #     SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
-
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: Update Library
-        run: |
-          echo "${{secrets.SSH_PRIV_KEY_LIBRARY}}" > ssh-rsa.key
-          chmod 400 ssh-rsa.key
-          mkdir /root/.ssh && touch /root/.ssh/known_hosts
-          eval $(ssh-agent) && ssh-add ssh-rsa.key
-          ssh-keyscan -H github.com >> /root/.ssh/known_hosts
-          chmod +x ./update_library.sh && ./update_library.sh -b main
-          cat ./library/requirements.txt >> requirements.txt
+        uses: AtarB2B/github-library-workflow@main
+        with:
+          SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
 
       - name: Flow Deploy
         uses: AtarB2B/github-fc-deploy-workflow@main
@@ -107,23 +94,10 @@ jobs:
         username: ${{github.repository_owner}}
         password: ${{env.GITHUB_TOKEN}}
     steps:
-      # - name: Update Library
-      #   uses: AtarB2B/github-library-workflow@main
-      #   with:
-      #     SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
-
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: Update Library
-        run: |
-          echo "${{secrets.SSH_PRIV_KEY_LIBRARY}}" > ssh-rsa.key
-          chmod 400 ssh-rsa.key
-          mkdir /root/.ssh && touch /root/.ssh/known_hosts
-          eval $(ssh-agent) && ssh-add ssh-rsa.key
-          ssh-keyscan -H github.com >> /root/.ssh/known_hosts
-          chmod +x ./update_library.sh && ./update_library.sh -b main
-          cat ./library/requirements.txt >> requirements.txt
+        uses: AtarB2B/github-library-workflow@main
+        with:
+          SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
 
       - name: Flow Deploy
         uses: AtarB2B/github-create-tag-workflow@main
