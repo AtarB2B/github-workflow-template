@@ -94,6 +94,11 @@ jobs:
         username: ${{github.repository_owner}}
         password: ${{env.GITHUB_TOKEN}}
     steps:
+      - name: Update Library
+        uses: AtarB2B/github-library-workflow@main
+        with:
+          SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
+
       - name: Flow Deploy
         uses: AtarB2B/github-create-tag-workflow@main
         with:
@@ -103,24 +108,29 @@ jobs:
           CREATE_RELEASE: "true"
           CLIENT: "atar"
   
-  prod-deploy:
-    runs-on: ubuntu-latest
-    environment: prod-atar
-    if: ${{ startsWith(github.ref, 'refs/heads/main') }}
-    container:
-      image: ghcr.io/atarb2b/deploy-devops:latest
-      credentials:
-        username: ${{github.repository_owner}}
-        password: ${{env.GITHUB_TOKEN}}
-    steps:
-      - name: Flow Deploy
-        uses: AtarB2B/github-create-tag-workflow@main
-        with:
-          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-          DEPLOY_ENV: "prod-atar"
-          SVC_NAME: ${{ github.event.repository.name }}
-          CREATE_RELEASE: "false"
-          CLIENT: "atar"
+  # prod-deploy:
+  #   runs-on: ubuntu-latest
+  #   environment: prod-atar
+  #   if: ${{ startsWith(github.ref, 'refs/heads/main') }}
+  #   container:
+  #     image: ghcr.io/atarb2b/deploy-devops:latest
+  #     credentials:
+  #       username: ${{github.repository_owner}}
+  #       password: ${{env.GITHUB_TOKEN}}
+  #   steps:
+  #     - name: Update Library
+  #       uses: AtarB2B/github-library-workflow@main
+  #       with:
+  #         SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
+
+  #     - name: Flow Deploy
+  #       uses: AtarB2B/github-create-tag-workflow@main
+  #       with:
+  #         GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+  #         DEPLOY_ENV: "prod-atar"
+  #         SVC_NAME: ${{ github.event.repository.name }}
+  #         CREATE_RELEASE: "false"
+  #         CLIENT: "atar"
 
   # prod-schedule-deploy:
   #   runs-on: ubuntu-latest
