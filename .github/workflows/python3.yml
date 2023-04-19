@@ -88,14 +88,10 @@ jobs:
       
       - name: Setup python
         uses: actions/setup-python@v1
-      
-      - uses: BSFishy/pip-action@v1
-        with:
-          requirements: requirements.txt
 
-      # - name: Install Reqs
-      #   run: |
-      #     pip install -r requirements.txt || echo "Sem dependências para instalar"
+      - name: Install Reqs
+        run: |
+          pip install -r requirements.txt || echo "Sem dependências para instalar"
 
       - name: Flow Deploy
         uses: AtarB2B/github-fc-deploy-workflow@main
