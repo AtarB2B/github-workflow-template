@@ -88,8 +88,8 @@ jobs:
       
       - name: Install Reqs
         run: |
-          ls -l `which pip`
-          # pip install -r requirements.txt || echo "Sem dependências para instalar"
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || echo "Sem dependências para instalar"
 
       - name: Flow Deploy
         uses: AtarB2B/github-fc-deploy-workflow@main
