@@ -98,6 +98,7 @@ jobs:
         with:
           DEPLOY_ENV: "dev"
           SVC_NAME: ${{ github.event.repository.name }}
+          SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
   
   rc-deploy:
     runs-on: ubuntu-latest
