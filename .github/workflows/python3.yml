@@ -84,7 +84,7 @@ jobs:
           eval $(ssh-agent) && ssh-add ssh-rsa.key
           ssh-keyscan -H github.com >> /root/.ssh/known_hosts
           chmod +x ./update_library.sh && ./update_library.sh -b main
-          cat ./library/requirements.txt >> requirements.txt
+#          cat ./library/requirements.txt >> requirements.txt
 
       - name: Export variables
         run: |
