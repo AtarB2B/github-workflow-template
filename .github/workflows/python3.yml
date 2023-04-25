@@ -94,7 +94,7 @@ jobs:
           DEPLOY_ENV: "dev"
           SVC_NAME: ${{ github.event.repository.name }}
           CREATE_RELEASE: "true"
-          CLIENT: "atar"
+          SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
   
   # prod-deploy:
   #   runs-on: ubuntu-latest
