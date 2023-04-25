@@ -83,21 +83,11 @@ jobs:
           chmod +x ./update_library.sh && ./update_library.sh -b main
           cat ./library/requirements.txt >> requirements.txt
 
-      - name: Export variables
-        run: |
-          TAG=$(atar-cli ci -j=${GITHUB_REF_NAME} 2>&1)
-          echo "TAG=${TAG}" >> $GITHUB_ENV
-
-      - name: GCloud Deploy - HML
-        run: echo ${ATAR_CREDENTIALS_DEV}|gcloud auth activate-service-account --key-file=-
-      - name: Deploy ATAR_DEV ${{github.event.repository.name}} - ${{env.TAG}}
-        run: ${RETRY} gcloud -q --project=${ATAR_PROJECT_DEV} app deploy app.dev.yaml -v=${{env.TAG}} --no-promote
-
-      # - name: Flow Deploy
-      #   uses: AtarB2B/github-fc-deploy-workflow@main
-      #   with:
-      #     DEPLOY_ENV: "dev"
-      #     SVC_NAME: ${{ github.event.repository.name }}
+      - name: Flow Deploy
+        uses: AtarB2B/github-fc-deploy-workflow@main
+        with:
+          DEPLOY_ENV: "dev"
+          SVC_NAME: ${{ github.event.repository.name }}
   
   rc-deploy:
     runs-on: ubuntu-latest
