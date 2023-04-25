@@ -78,13 +78,20 @@ jobs:
 
       - name: Update Library
         run: |
+          echo "============start cat requirements"
+          cat requirements.txt
+          echo "============fim cat requirements"
           echo "${{secrets.SSH_PRIV_KEY_LIBRARY}}" > ssh-rsa.key
           chmod 400 ssh-rsa.key
           mkdir /root/.ssh && touch /root/.ssh/known_hosts
           eval $(ssh-agent) && ssh-add ssh-rsa.key
           ssh-keyscan -H github.com >> /root/.ssh/known_hosts
           chmod +x ./update_library.sh && ./update_library.sh -b main
-#          cat ./library/requirements.txt >> requirements.txt
+          echo "============cat library requirements========="
+          cat ./library/requirements.txt
+          cat ./library/requirements.txt >> requirements.txt
+          echo "============cat after merge========="
+          cat requirements.txt
 
       - name: Export variables
         run: |
@@ -117,20 +124,20 @@ jobs:
 
       - name: Update Library
         run: |
+          echo "============start cat requirements"
+          cat requirements.txt
+          echo "============fim cat requirements"
           echo "${{secrets.SSH_PRIV_KEY_LIBRARY}}" > ssh-rsa.key
           chmod 400 ssh-rsa.key
           mkdir /root/.ssh && touch /root/.ssh/known_hosts
           eval $(ssh-agent) && ssh-add ssh-rsa.key
           ssh-keyscan -H github.com >> /root/.ssh/known_hosts
           chmod +x ./update_library.sh && ./update_library.sh -b main
-          echo "============cat requirements"
-          cat requirements.txt
           echo "============cat library requirements========="
           cat ./library/requirements.txt
           cat ./library/requirements.txt >> requirements.txt
           echo "============cat after merge========="
           cat requirements.txt
-
       - name: Flow Deploy
         uses: AtarB2B/github-create-tag-workflow@main
         with:
