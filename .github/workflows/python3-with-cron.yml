@@ -44,9 +44,9 @@ jobs:
           token: ${{ env.GITHUB_TOKEN }}
           repository: AtarB2B/github-workflow-template
           script: |
-            const { Octokit } = require("@octokit/rest");
+            const { Octokit } = require("@octokit/core");
             const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-            octokit.actions.createWorkflowDispatch({
+            octokit.request('POST /repos/:owner/:repo/actions/workflows/:workflow_id/dispatches', {
               owner: "AtarB2B",
               repo: "github-workflow-template",
               workflow_id: "55452555",
