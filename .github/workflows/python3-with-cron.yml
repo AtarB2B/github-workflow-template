@@ -38,6 +38,14 @@ jobs:
         username: ${{github.repository_owner}}
         password: ${{env.GITHUB_TOKEN}}
     steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Install dependencies
+        run: npm install @octokit/core
+
       - name: Trigger Scheduled Job
         uses: actions/github-script@v4
         with:
