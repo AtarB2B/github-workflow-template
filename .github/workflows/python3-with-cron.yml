@@ -39,10 +39,19 @@ jobs:
         password: ${{env.GITHUB_TOKEN}}
     steps:
       - name: Trigger Scheduled Job
-        uses: cardinalby/schedule-job-action@v1
+        uses: actions/github-script@v4
         with:
-          ghToken: ${{env.GITHUB_TOKEN}}
-          templateYmlFile: 'AtarB2B/github-workflow-template/.github/workflows/cron.yml@main'
+          token: ${{ env.GITHUB_TOKEN }}
+          repository: AtarB2B/github-workflow-template
+          script: |
+            const { Octokit } = require("@octokit/rest");
+            const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+            octokit.actions.createWorkflowDispatch({
+              owner: "AtarB2B",
+              repo: "github-workflow-template",
+              workflow_id: "55452555",
+              ref: "main",
+            });
 
   unit-test:
     runs-on: ubuntu-latest
