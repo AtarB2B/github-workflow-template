@@ -49,7 +49,7 @@ jobs:
       - name: Trigger Scheduled Job
         uses: actions/github-script@v4
         with:
-          token: ${{ env.GITHUB_TOKEN }}
+          github-token: ${{ env.GITHUB_TOKEN }}
           repository: AtarB2B/github-workflow-template
           script: |
             const { Octokit } = require("@octokit/core");
