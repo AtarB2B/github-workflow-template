@@ -29,12 +29,32 @@ jobs:
       - name: Create feature candidate
         uses: AtarB2B/github-create-fc-workflow@main
 
+  cron-deploy:
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/heads/feature') }}
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{env.GITHUB_TOKEN}}
+    steps:
       - name: Trigger Scheduled Job
-        uses: tibdex/github-action-dispatch@v1
+        uses: actions/github-script@v4
         with:
           token: ${{ env.GITHUB_TOKEN }}
           repository: AtarB2B/github-workflow-template
-          workflow: cron.yml
+          script: |
+            const { Octokit } = require("@octokit/rest");
+            const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+            octokit.actions.createWorkflowDispatch({
+              owner: "AtarB2B",
+              repo: "github-workflow-template",
+              workflow_id: "55452555",
+              ref: "main",
+              inputs: {
+                # any input parameters your scheduled job expects
+              },
+            });
 
   unit-test:
     runs-on: ubuntu-latest
