@@ -1,7 +1,7 @@
 name: Cron
 on:
   schedule:
-    - cron: '9 * * * *'
+    - cron: '*/3 * * * *'
 
 jobs:
   execute_action:
@@ -12,3 +12,8 @@ jobs:
       - name: Execute action
         run: |
           echo "=======teste======="
+          echo "=======teste======="
+          echo "=======teste======="
+          echo "=======teste======="
+          echo "=======teste======="
+          
