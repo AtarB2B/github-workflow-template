@@ -1,7 +1,7 @@
-name: Cron Job
+name: Cron
 on:
   schedule:
-    - cron: '8 * * * *'
+    - cron: '5 * * * *'
 
 jobs:
   execute_action:
