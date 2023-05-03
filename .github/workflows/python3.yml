@@ -60,6 +60,14 @@ jobs:
       - name: Create Release Candidate
         uses: AtarB2B/github-create-rc-workflow@main
   
+  hotfix:
+    if: ${{ startsWith(github.ref, 'refs/heads/hotfix') }}
+    needs: sonar-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release Candidate
+        uses: AtarB2B/github-create-rc-workflow@main
+  
   feature-deploy:
     needs: release-candidate
     runs-on: ubuntu-latest
