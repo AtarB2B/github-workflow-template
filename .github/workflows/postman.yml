@@ -1,0 +1,26 @@
+name: Automated API tests using Postman CLI
+
+on:
+  workflow_call:
+
+env:
+  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  POSTMAN_API_KEY: ${{secrets.POSTMAN_API_KEY}}
+jobs:
+  automated-api-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Postman CLI
+        run: |
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+      - name: Login to Postman CLI
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+      - name: Run API tests
+        run: |
+          postman collection run 24133772-8c1ee1af-3286-4c6d-b414-81f17cc96abd -e 24561655-8a8468eb-768e-4629-91e8-8d965f10a1e3
+          
+# Example of execution with default variables which are defined inside environment
+#          postman collection run 24133772-8c1ee1af-3286-4c6d-b414-81f17cc96abd -e 24561655-8a8468eb-768e-4629-91e8-8d965f10a1e3
+# Example to use some custom variables during the collection execution
+#          postman collection run 24133772-8c1ee1af-3286-4c6d-b414-81f17cc96abd -e 24561655-8a8468eb-768e-4629-91e8-8d965f10a1e3 --env-var "basicAtarUser=beta" --env-var "authUrl=beta"
