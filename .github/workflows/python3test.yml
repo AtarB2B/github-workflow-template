@@ -75,7 +75,7 @@ jobs:
         uses: AtarB2B/github-create-rc-workflow@test
         with:
           ORIGIN: "fix"
-          SERVICE: ${{ github.event.repository.name }}
+          SERVICE: "auth"
           SERVICE_ACCOUNT_CREDENTIALS: ${SERVICE_ACCOUNT_CREDENTIALS}
   
   # feature-deploy:
