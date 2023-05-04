@@ -95,21 +95,21 @@ jobs:
           CREATE_RELEASE: "true"
           SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
   
-  # prod-deploy:
-  #   runs-on: ubuntu-latest
-  #   environment: production-atar
-  #   if: ${{ startsWith(github.ref, 'refs/heads/main') }}
-  #   container:
-  #     image: ghcr.io/atarb2b/deploy-devops:latest
-  #     credentials:
-  #       username: ${{github.repository_owner}}
-  #       password: ${{env.GITHUB_TOKEN}}
-  #   steps:
-  #     - name: Flow Deploy
-  #       uses: AtarB2B/github-create-tag-workflow@main
-  #       with:
-  #         GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-  #         DEPLOY_ENV: "prod-atar"
-  #         SVC_NAME: ${{ github.event.repository.name }}
-  #         CREATE_RELEASE: "false"
-  #         SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
+  prod-deploy:
+    runs-on: ubuntu-latest
+    environment: production-atar
+    if: ${{ startsWith(github.ref, 'refs/heads/main') }}
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{env.GITHUB_TOKEN}}
+    steps:
+      - name: Flow Deploy
+        uses: AtarB2B/github-create-tag-workflow@main
+        with:
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+          DEPLOY_ENV: "prod-atar"
+          SVC_NAME: ${{ github.event.repository.name }}
+          CREATE_RELEASE: "false"
+          SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
