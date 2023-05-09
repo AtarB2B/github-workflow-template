@@ -75,7 +75,6 @@ jobs:
         uses: AtarB2B/github-create-rc-workflow@test
         with:
           ORIGIN: "hotfix"
-          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
   
   # feature-deploy:
   #   needs: release-candidate
