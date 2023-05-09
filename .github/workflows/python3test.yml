@@ -55,17 +55,15 @@ jobs:
   #         GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
   #         SONAR_TOKEN: ${{env.SONAR_TOKEN}}
   
-  # release-candidate:
-  #   if: ${{ startsWith(github.ref, 'refs/heads/fc') }}
-  #   needs: sonar-scan
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Create Release Candidate
-  #       uses: AtarB2B/github-create-rc-workflow@test
-  #       with:
-  #         ORIGIN: "fc"
-  #         SERVICE: ${{ github.event.repository.name }}
-  #         SERVICE_ACCOUNT_CREDENTIALS: ${SERVICE_ACCOUNT_CREDENTIALS}
+  release-candidate:
+    if: ${{ startsWith(github.ref, 'refs/heads/fc') }}
+    needs: sonar-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release Candidate
+        uses: AtarB2B/github-create-rc-workflow@test
+        with:
+          ORIGIN: "fc"
   
   hotfix:
     if: ${{ startsWith(github.ref, 'refs/heads/hotfix') }}
