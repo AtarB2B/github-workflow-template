@@ -57,8 +57,11 @@ jobs:
     if: ${{ startsWith(github.ref, 'refs/heads/fc') }}
     needs: sonar-scan
     runs-on: ubuntu-latest
+    outputs:
+      RC_BRANCH: ${{ steps.create_rc.outputs.RC_BRANCH }}
     steps:
       - name: Create Release Candidate
+        id: create_rc
         uses: AtarB2B/github-create-rc-workflow@test
         with:
           ORIGIN: "fc"
@@ -91,6 +94,7 @@ jobs:
           SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
   
   rc-deploy:
+    needs: release-candidate
     runs-on: ubuntu-latest
     environment: homolog
     if: ${{ startsWith(github.ref, 'refs/heads/rc') }}
@@ -108,6 +112,7 @@ jobs:
           SVC_NAME: ${{ github.event.repository.name }}
           CREATE_RELEASE: "true"
           SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
+          RC_BRANCH: ${{needs.release-candidate.outputs.RC_BRANCH}}
   
   prod-deploy:
     runs-on: ubuntu-latest
