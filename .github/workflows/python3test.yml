@@ -65,6 +65,7 @@ jobs:
         uses: AtarB2B/github-create-rc-workflow@test
         with:
           ORIGIN: "fc"
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
   
   hotfix:
     if: ${{ startsWith(github.ref, 'refs/heads/hotfix') }}
