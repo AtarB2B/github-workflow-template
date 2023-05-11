@@ -70,8 +70,11 @@ jobs:
     if: ${{ startsWith(github.ref, 'refs/heads/hotfix') }}
     needs: sonar-scan
     runs-on: ubuntu-latest
+    outputs:
+      RC_BRANCH: ${{ steps.create_rc.outputs.RC_BRANCH }}
     steps:
       - name: Create Release Candidate
+        id: create_rc
         uses: AtarB2B/github-create-rc-workflow@test
         with:
           ORIGIN: "hotfix"
