@@ -80,7 +80,7 @@ jobs:
           ORIGIN: "hotfix"
   
   feature-deploy:
-    needs: release-candidate
+    needs: [release-candidate, hotfix]
     runs-on: ubuntu-latest
     environment: qa
     container:
@@ -97,7 +97,7 @@ jobs:
           SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
   
   rc-deploy:
-    needs: release-candidate
+    needs: [release-candidate, hotfix]
     runs-on: ubuntu-latest
     environment: homolog
     if: ${{ startsWith(github.ref, 'refs/heads/rc') }}
