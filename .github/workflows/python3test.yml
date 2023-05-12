@@ -114,7 +114,7 @@ jobs:
   
   rc-deploy:
     runs-on: ubuntu-latest
-    environment: homolog
+    environment: staging
     if: ${{ startsWith(github.ref, 'refs/heads/rc') }}
     container:
       image: ghcr.io/atarb2b/deploy-devops:latest
@@ -133,7 +133,7 @@ jobs:
   
   prod-deploy:
     runs-on: ubuntu-latest
-    environment: prod-atar
+    environment: production-atar
     if: ${{ startsWith(github.ref, 'refs/heads/main') }}
     container:
       image: ghcr.io/atarb2b/deploy-devops:latest
