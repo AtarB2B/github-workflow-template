@@ -60,7 +60,7 @@ jobs:
     steps:
       - name: Create Release Candidate
         id: create_rc
-        uses: AtarB2B/github-create-rc-workflow@test
+        uses: AtarB2B/github-create-rc-workflow@main
         with:
           ORIGIN: "fc"
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
@@ -72,7 +72,7 @@ jobs:
     steps:
       - name: Create Release Candidate
         id: create_rc
-        uses: AtarB2B/github-create-rc-workflow@test
+        uses: AtarB2B/github-create-rc-workflow@main
         with:
           ORIGIN: "hotfix"
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
