@@ -67,18 +67,6 @@ jobs:
           SERVICE: ${{ github.event.repository.name }}
           SERVICE_ACCOUNT_CREDENTIALS: ${SERVICE_ACCOUNT_CREDENTIALS}
   
-  hotfix:
-    if: ${{ startsWith(github.ref, 'refs/heads/hotfix') }}
-    needs: sonar-scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create Release Candidate
-        uses: AtarB2B/github-create-rc-workflow@main
-        with:
-          ORIGIN: "fix"
-          SERVICE: ${{ github.event.repository.name }}
-          SERVICE_ACCOUNT_CREDENTIALS: ${SERVICE_ACCOUNT_CREDENTIALS}
-  
   feature-deploy:
     needs: release-candidate
     runs-on: ubuntu-latest
