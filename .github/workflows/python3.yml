@@ -15,8 +15,6 @@ env:
   ATAR_PROJECT_DEV: ${{secrets.ATAR_PROJECT_ID_DEV}}
   ATAR_CREDENTIALS_DEV: ${{secrets.ATAR_CREDENTIALS_DEV}}
 
-  SERVICE_ACCOUNT_CREDENTIALS: ${{secrets.SERVICE_ACCOUNT_CREDENTIALS}}
-
   RETRY: "retry -l -i=60s -c=3"
 
 jobs:
@@ -61,15 +59,45 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create Release Candidate
-        uses: AtarB2B/github-create-rc-workflow@main
+        id: create_rc
+        uses: AtarB2B/github-create-rc-workflow@test
         with:
           ORIGIN: "fc"
-          SERVICE: ${{ github.event.repository.name }}
-          SERVICE_ACCOUNT_CREDENTIALS: ${SERVICE_ACCOUNT_CREDENTIALS}
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
   
+  hotfix:
+    if: ${{ startsWith(github.ref, 'refs/heads/hotfix') }}
+    needs: sonar-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release Candidate
+        id: create_rc
+        uses: AtarB2B/github-create-rc-workflow@test
+        with:
+          ORIGIN: "hotfix"
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+  
+  hotfix-deploy:
+    needs: hotfix
+    runs-on: ubuntu-latest
+    environment: qa
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{env.GITHUB_TOKEN}}
+    steps:
+      - name: Flow Deploy
+        uses: AtarB2B/github-fc-deploy-workflow@main
+        with:
+          DEPLOY_ENV: "dev"
+          SVC_NAME: ${{ github.event.repository.name }}
+          SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
+
   feature-deploy:
     needs: release-candidate
     runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/heads/fc') }}
     environment: qa
     container:
       image: ghcr.io/atarb2b/deploy-devops:latest
@@ -86,7 +114,7 @@ jobs:
   
   rc-deploy:
     runs-on: ubuntu-latest
-    environment: homolog
+    environment: staging
     if: ${{ startsWith(github.ref, 'refs/heads/rc') }}
     container:
       image: ghcr.io/atarb2b/deploy-devops:latest
@@ -105,7 +133,7 @@ jobs:
   
   prod-deploy:
     runs-on: ubuntu-latest
-    environment: prod-atar
+    environment: production-atar
     if: ${{ startsWith(github.ref, 'refs/heads/main') }}
     container:
       image: ghcr.io/atarb2b/deploy-devops:latest
