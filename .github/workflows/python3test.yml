@@ -30,32 +30,32 @@ jobs:
       - name: Create feature candidate
         uses: AtarB2B/github-create-fc-workflow@main
 
-  # unit-test:
-  #   runs-on: ubuntu-latest
-  #   # continue-on-error: true
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Run Unit Tests
-  #       uses: AtarB2B/github-unit-tests-workflow@main
-  #       with:
-  #         SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
+  unit-test:
+    runs-on: ubuntu-latest
+    # continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run Unit Tests
+        uses: AtarB2B/github-unit-tests-workflow@main
+        with:
+          SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
   
-  # sonar-scan:
-  #   runs-on: ubuntu-latest
-  #   needs: unit-test
-  #   continue-on-error: true
-  #   steps:
-  #     - name: Run Sonar Scanner
-  #       uses: AtarB2B/github-sonar-scan-workflow@main
-  #       with:
-  #         github-repo-name: ${{ github.event.repository.name }}
-  #         GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-  #         SONAR_TOKEN: ${{env.SONAR_TOKEN}}
+  sonar-scan:
+    runs-on: ubuntu-latest
+    needs: unit-test
+    continue-on-error: true
+    steps:
+      - name: Run Sonar Scanner
+        uses: AtarB2B/github-sonar-scan-workflow@main
+        with:
+          github-repo-name: ${{ github.event.repository.name }}
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+          SONAR_TOKEN: ${{env.SONAR_TOKEN}}
   
   release-candidate:
     if: ${{ startsWith(github.ref, 'refs/heads/fc') }}
-    # needs: sonar-scan
+    needs: sonar-scan
     runs-on: ubuntu-latest
     steps:
       - name: Create Release Candidate
@@ -67,7 +67,7 @@ jobs:
   
   hotfix:
     if: ${{ startsWith(github.ref, 'refs/heads/hotfix') }}
-    # needs: sonar-scan
+    needs: sonar-scan
     runs-on: ubuntu-latest
     steps:
       - name: Create Release Candidate
@@ -131,24 +131,24 @@ jobs:
           CREATE_RELEASE: "true"
           SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
   
-  # prod-deploy:
-  #   runs-on: ubuntu-latest
-  #   environment: prod-atar
-  #   if: ${{ startsWith(github.ref, 'refs/heads/main') }}
-  #   container:
-  #     image: ghcr.io/atarb2b/deploy-devops:latest
-  #     credentials:
-  #       username: ${{github.repository_owner}}
-  #       password: ${{env.GITHUB_TOKEN}}
-  #   steps:
-  #     - name: Flow Deploy
-  #       uses: AtarB2B/github-create-tag-workflow@main
-  #       with:
-  #         GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-  #         DEPLOY_ENV: "prod-atar"
-  #         SVC_NAME: ${{ github.event.repository.name }}
-  #         CREATE_RELEASE: "false"
-  #         SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
+  prod-deploy:
+    runs-on: ubuntu-latest
+    environment: prod-atar
+    if: ${{ startsWith(github.ref, 'refs/heads/main') }}
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{env.GITHUB_TOKEN}}
+    steps:
+      - name: Flow Deploy
+        uses: AtarB2B/github-create-tag-workflow@main
+        with:
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+          DEPLOY_ENV: "prod-atar"
+          SVC_NAME: ${{ github.event.repository.name }}
+          CREATE_RELEASE: "false"
+          SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
 
   # prod-schedule-deploy:
   #   runs-on: ubuntu-latest
