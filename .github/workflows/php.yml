@@ -30,42 +30,11 @@ jobs:
       - name: Create feature candidate
         uses: AtarB2B/github-create-fc-workflow@main
 
-  # unit-test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Run Unit Tests
-  #       uses: AtarB2B/github-unit-tests-workflow@php
-
   unit-test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-
-      - uses: 'ramsey/composer-install@v2'
-        name: Install Composer & Dependencies
-        
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@v3
-        env:
-          XDEBUG_MODE: coverage
-        with:
-          bootstrap: vendor/autoload.php
-          configuration: phpunit.xml
-          php_extensions: xdebug
-          args: tests --coverage-clover coverage.xml
-
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
-        with:
-          name: code-coverage-report
-          path: coverage.xml
+      - name: Run Unit Tests
+        uses: AtarB2B/github-unit-tests-workflow@php
   
   sonar-scan:
     runs-on: ubuntu-latest
