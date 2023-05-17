@@ -7,10 +7,10 @@ env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   REPO_NAME: ${{github.event.repository.name}}
   SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
-  # ATAR_PROJECT: ${{secrets.ATAR_PROJECT_ID_PROD}}
-  # ATAR_CREDENTIALS: ${{secrets.ATAR_CREDENTIALS_PROD}}
-  # ATAR_PROJECT_DEV: ${{secrets.ATAR_PROJECT_ID_DEV}}
-  # ATAR_CREDENTIALS_DEV: ${{secrets.ATAR_CREDENTIALS_DEV}}
+  ATAR_PROJECT: ${{secrets.ATAR_PROJECT_ID_PROD}}
+  ATAR_CREDENTIALS: ${{secrets.ATAR_CREDENTIALS_PROD}}
+  ATAR_PROJECT_DEV: ${{secrets.ATAR_PROJECT_ID_DEV}}
+  ATAR_CREDENTIALS_DEV: ${{secrets.ATAR_CREDENTIALS_DEV}}
   RETRY: "retry -l -i=60s -c=3"
 
 jobs:
@@ -98,9 +98,6 @@ jobs:
     steps:
       - name: Flow Deploy
         uses: AtarB2B/github-fc-deploy-workflow@php
-        with:
-          ATAR_PROJECT: ${{secrets.ATAR_PROJECT_ID_DEV}}
-          ATAR_CREDENTIALS: ${{secrets.ATAR_CREDENTIALS_DEV}}
   
   # rc-deploy:
   #   runs-on: ubuntu-latest
