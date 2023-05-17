@@ -44,17 +44,17 @@ jobs:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
           SONAR_TOKEN: ${{env.SONAR_TOKEN}}
   
-  # release-candidate:
-  #   if: ${{ startsWith(github.ref, 'refs/heads/fc') }}
-  #   needs: sonar-scan
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Create Release Candidate
-  #       id: create_rc
-  #       uses: AtarB2B/github-create-rc-workflow@main
-  #       with:
-  #         ORIGIN: "fc"
-  #         GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+  release-candidate:
+    if: ${{ startsWith(github.ref, 'refs/heads/fc') }}
+    needs: sonar-scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release Candidate
+        id: create_rc
+        uses: AtarB2B/github-create-rc-workflow@main
+        with:
+          ORIGIN: "fc"
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
   
   # hotfix:
   #   if: ${{ startsWith(github.ref, 'refs/heads/hotfix') }}
@@ -85,23 +85,22 @@ jobs:
   #         SVC_NAME: ${{ github.event.repository.name }}
   #         SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
 
-  # feature-deploy:
-  #   needs: release-candidate
-  #   runs-on: ubuntu-latest
-  #   if: ${{ startsWith(github.ref, 'refs/heads/fc') }}
-  #   environment: qa
-  #   container:
-  #     image: ghcr.io/atarb2b/deploy-devops:latest
-  #     credentials:
-  #       username: ${{github.repository_owner}}
-  #       password: ${{env.GITHUB_TOKEN}}
-  #   steps:
-  #     - name: Flow Deploy
-  #       uses: AtarB2B/github-fc-deploy-workflow@minimal
-  #       with:
-  #         DEPLOY_ENV: "dev"
-  #         SVC_NAME: ${{ github.event.repository.name }}
-  #         SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
+  feature-deploy:
+    needs: release-candidate
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/heads/fc') }}
+    environment: qa
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{env.GITHUB_TOKEN}}
+    steps:
+      - name: Flow Deploy
+        uses: AtarB2B/github-fc-deploy-workflow@php
+        with:
+          ATAR_PROJECT: ${{secrets.ATAR_PROJECT_ID_DEV}}
+          ATAR_CREDENTIALS: ${{secrets.ATAR_CREDENTIALS_DEV}}
   
   # rc-deploy:
   #   runs-on: ubuntu-latest
