@@ -28,7 +28,6 @@ jobs:
   
   release-candidate:
     if: ${{ startsWith(github.ref, 'refs/heads/fc') }}
-    needs: sonar-scan
     runs-on: ubuntu-latest
     steps:
       - name: Create Release Candidate
