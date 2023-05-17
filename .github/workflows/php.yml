@@ -39,7 +39,6 @@ jobs:
   
   hotfix:
     if: ${{ startsWith(github.ref, 'refs/heads/hotfix') }}
-    needs: sonar-scan
     runs-on: ubuntu-latest
     steps:
       - name: Create Release Candidate
