@@ -1,0 +1,96 @@
+name: "Continuous Integration"
+
+on:
+  workflow_call:
+
+env:
+  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  ATAR_PROJECT_DEV: ${{secrets.ATAR_PROJECT_ID_DEV}}
+  ATAR_CREDENTIALS_DEV: ${{secrets.ATAR_CREDENTIALS_DEV}}
+  SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+  RETRY: 'retry -l -i=60s -c=3'
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Update Library
+        run: |
+          echo "${{secrets.SSH_PRIV_KEY_LIBRARY}}" > ssh-rsa.key
+          chmod 400 ssh-rsa.key
+          mkdir ~/.ssh && touch ~/.ssh/known_hosts
+          eval $(ssh-agent) && ssh-add ssh-rsa.key
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+          chmod +x ./update_library.sh && ./update_library.sh -s
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip ; pip install flake8 pytest faker coverage pytest-cov
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f development/requirements.txt ]; then pip install -r development/requirements.txt; fi
+          if [ -f library/requirements.txt ]; then pip install -r library/requirements.txt; fi
+
+      - name: Check format
+        run: |
+          pycodestyle ./app ./tests; isort --check-only ./app ./tests
+
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Test with pytest
+        run: ENV='test' pytest tests/ --ignore=app/main
+      - name: Test Coverage with pytest
+        run: ENV='test' pytest tests/ --ignore=app/main --ignore=library/ --cov-config=.coveragerc --cov-report=xml --doctest-modules --cov=. app/
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-report
+          path: coverage.xml
+
+  sonar-scan:
+    needs: unit-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download code coverage results
+        uses: actions/download-artifact@v3
+
+      - name: 'Move coverage file to correct folder'
+        run: sed -i 's+/home/runner/work/${{env.REPO_NAME}}/${{env.REPO_NAME}}+/github/workspace+g' code-coverage-report/coverage.xml
+      - uses: SonarSource/sonarcloud-github-action@master
+
+  feature-deploy:
+    runs-on: ubuntu-latest
+    environment: qa
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{secrets.GITHUB_TOKEN}}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Update Library
+      run: |
+        echo "${{secrets.SSH_PRIV_KEY_LIBRARY}}" > ssh-rsa.key
+        chmod 400 ssh-rsa.key
+        mkdir /root/.ssh && touch /root/.ssh/known_hosts
+        eval $(ssh-agent) && ssh-add ssh-rsa.key
+        ssh-keyscan -H github.com >> /root/.ssh/known_hosts
+        chmod +x ./update_library.sh && ./update_library.sh -s
+        cat ./library/requirements.txt >> requirements.txt
+
+    - name: GCloud Deploy - HML
+      run: echo ${ATAR_CREDENTIALS_DEV}|gcloud auth activate-service-account --key-file=-
+    - name: Deploy ATAR_DEV ${{github.event.repository.name}}
+      run: ${RETRY} gcloud -q --project=${ATAR_PROJECT_DEV} app deploy app.dev.yaml -v=main --no-promote
