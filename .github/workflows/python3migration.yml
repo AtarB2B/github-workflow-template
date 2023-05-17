@@ -5,6 +5,7 @@ on:
 
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
   ATAR_PROJECT_DEV: ${{secrets.ATAR_PROJECT_ID_DEV}}
   ATAR_CREDENTIALS_DEV: ${{secrets.ATAR_CREDENTIALS_DEV}}
   SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
@@ -67,6 +68,9 @@ jobs:
       - name: 'Move coverage file to correct folder'
         run: sed -i 's+/home/runner/work/${{env.REPO_NAME}}/${{env.REPO_NAME}}+/github/workspace+g' code-coverage-report/coverage.xml
       - uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
 
   feature-deploy:
     runs-on: ubuntu-latest
