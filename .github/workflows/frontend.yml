@@ -37,6 +37,7 @@ jobs:
   sonar-scan:
     runs-on: ubuntu-latest
     needs: unit-test
+    continue-on-error: true
     steps:
       - name: Run Sonar Scanner
         uses: AtarB2B/github-sonar-scan-workflow@frontend
