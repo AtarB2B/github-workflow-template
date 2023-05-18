@@ -1,0 +1,59 @@
+name: "Continuous Integration"
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    env:
+      sonarToken: ${{ secrets.SONAR_TOKEN }}
+    runs-on: macos-12
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: n1hility/cancel-previous-runs@v2
+      with:
+        token: ${{ secrets.MANUAL_ACTION_TOKEN }}
+
+    - name: Select latest Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '14.2'
+
+    - name: Install Tools
+      run: |
+        brew install sonar-scanner
+        brew install chargepoint/xcparse/xcparse
+        gem install slather
+        
+    - name: CocoaPod Install
+      run: pod install
+    
+    - name: Build and test
+      run: |
+        xcodebuild -version
+        xcodebuild clean build test -workspace "${project}" -scheme "${scheme}" ${params} -destination "${destination}" | xcpretty --utf --color && exit ${PIPESTATUS[0]}
+      env:
+         project: 'Atar.xcworkspace'
+         params: '-derivedDataPath ./DerivedData -enableCodeCoverage YES'
+         scheme: 'Atar'
+         destination: 'name=iPhone 14'
+
+    - name: Code Coverage
+      run: |
+        slather coverage --sonarqube-xml ${params} --workspace ${workspace} ${project}
+      env:
+        workspace: 'Atar.xcworkspace'
+        project: 'Atar.xcodeproj'
+        params: '
+          --build-directory ./DerivedData
+          --output-directory ./reports
+          --scheme Atar'
+
+    - name: Run Sonar
+      if: ${{ env.sonarToken != 0 }}
+      run: |
+        git fetch --unshallow --no-tags
+        sonar-scanner -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
