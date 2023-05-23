@@ -36,7 +36,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: Run Sonar Scanner
-        uses: AtarB2B/github-sonar-scan-workflow@main
+        uses: AtarB2B/github-sonar-scan-workflow@python2
         with:
           github-repo-name: ${{ github.event.repository.name }}
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
