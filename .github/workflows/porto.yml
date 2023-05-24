@@ -2,6 +2,10 @@ name: "Continuous Deployment"
 
 on:
   workflow_call:
+    inputs:
+      DEPLOY_ENV:
+        type: string
+        required: true
 
 env:
   GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -26,7 +30,7 @@ jobs:
         uses: AtarB2B/github-deploy-porto@main
         with:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-          DEPLOY_ENV: "legacy"
+          DEPLOY_TO: "legacy"
           SSH_PRIV_KEY_LIBS_BACKEND: ${{env.SSH_PRIV_KEY_LIBS_BACKEND}}
 
   porto-deploy:
@@ -43,5 +47,5 @@ jobs:
         uses: AtarB2B/github-deploy-porto@main
         with:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-          DEPLOY_ENV: "prod-porto"
+          DEPLOY_TO: "prod-porto"
           SSH_PRIV_KEY_LIBS_BACKEND: ${{env.SSH_PRIV_KEY_LIBS_BACKEND}}
