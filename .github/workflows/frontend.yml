@@ -18,7 +18,7 @@ env:
 jobs:
   create-feature-candidate:
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/heads/feature') }}
+    if: startsWith(github.ref, 'refs/heads/feature')
     container:
       image: ghcr.io/atarb2b/deploy-devops:latest
       credentials:
@@ -30,14 +30,14 @@ jobs:
   
   unit-test:
     runs-on: ubuntu-latest
-    if: ${{ !startsWith(github.ref, 'refs/heads/feature') }}
+    if: startsWith(github.ref, 'refs/heads/feature') != true
     steps:
       - name: Run Unit Tests
         uses: AtarB2B/github-unit-tests-workflow@frontend
 
   sonar-scan:
     runs-on: ubuntu-latest
-    if: ${{ !startsWith(github.ref, 'refs/heads/feature') }}
+    if: startsWith(github.ref, 'refs/heads/feature') != true
     needs: unit-test
     continue-on-error: true
     steps:
