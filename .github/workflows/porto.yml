@@ -19,7 +19,7 @@ jobs:
   legacy-deploy:
     runs-on: ubuntu-latest
     environment: production-porto
-    if: ${{ github.event.inputs.DEPLOY_ENV == 'legacy' }}
+    if: ${{ inputs.DEPLOY_ENV == 'legacy' }}
     container:
       image: ghcr.io/atarb2b/deploy-devops:latest
       credentials:
@@ -36,7 +36,7 @@ jobs:
   porto-deploy:
     runs-on: ubuntu-latest
     environment: production-porto
-    if: ${{ github.event.inputs.DEPLOY_ENV == 'prod-porto' }}
+    if: ${{ inputs.DEPLOY_ENV == 'prod-porto' }}
     container:
       image: ghcr.io/atarb2b/deploy-devops:latest
       credentials:
