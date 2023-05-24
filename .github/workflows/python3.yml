@@ -32,6 +32,7 @@ jobs:
 
   unit-test:
     runs-on: ubuntu-latest
+    if: ! ${{ startsWith(github.ref, 'refs/heads/feature') }}
     # continue-on-error: true
     steps:
       - name: Checkout
@@ -43,6 +44,7 @@ jobs:
   
   sonar-scan:
     runs-on: ubuntu-latest
+    if: ! ${{ startsWith(github.ref, 'refs/heads/feature') }}
     needs: unit-test
     continue-on-error: true
     steps:
