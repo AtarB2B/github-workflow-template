@@ -1,0 +1,47 @@
+name: "Continuous Deployment"
+
+on:
+  workflow_call:
+
+env:
+  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  PORTO_PROJECT: ${{secrets.PORTO_PROJECT_ID_PROD}}
+  PORTO_CREDENTIALS: ${{secrets.PORTO_CREDENTIALS_PROD}}
+  SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+  SSH_PRIV_KEY_LIBS_BACKEND: ${{secrets.SSH_PRIV_KEY_LIBS_BACKEND}}
+  RETRY: 'retry -l -i=60s -c=3'
+
+jobs:
+  legacy-deploy:
+    runs-on: ubuntu-latest
+    environment: production-porto
+    if: ${{ github.ref_name == 'main'}}
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{env.GITHUB_TOKEN}}
+    steps:
+      - name: Flow Deploy
+        uses: AtarB2B/github-deploy-porto@main
+        with:
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+          DEPLOY_ENV: "legacy"
+          SSH_PRIV_KEY_LIBS_BACKEND: ${{env.SSH_PRIV_KEY_LIBS_BACKEND}}
+
+  porto-deploy:
+    runs-on: ubuntu-latest
+    environment: production-porto
+    if: ${{ github.ref_name == 'main'}}
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{env.GITHUB_TOKEN}}
+    steps:
+      - name: Flow Deploy
+        uses: AtarB2B/github-deploy-porto@main
+        with:
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+          DEPLOY_ENV: "prod-porto"
+          SSH_PRIV_KEY_LIBS_BACKEND: ${{env.SSH_PRIV_KEY_LIBS_BACKEND}}
