@@ -42,3 +42,57 @@ jobs:
           github-repo-name: ${{ github.event.repository.name }}
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
           SONAR_TOKEN: ${{env.SONAR_TOKEN}}
+
+  qa-deploy:
+    needs: release-candidate
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/heads/qa') }}
+    environment: qa
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{env.GITHUB_TOKEN}}
+    steps:
+      - name: Flow Deploy
+        uses: AtarB2B/github-deploy-k8s@main
+        with:
+          ATAR_PROJECT: ${{secrets.ATAR_PROJECT_ID_PROD}}
+          ATAR_CREDENTIALS: ${{secrets.ATAR_CREDENTIALS_PROD}}
+          IMAGE_NAME: gcr.io/${{secrets.ATAR_PROJECT_ID_PROD}}/authorizer
+
+  staging-deploy:
+    needs: release-candidate
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/heads/staging') }}
+    environment: staging
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{env.GITHUB_TOKEN}}
+    steps:
+      - name: Flow Deploy
+        uses: AtarB2B/github-deploy-k8s@main
+        with:
+          ATAR_PROJECT: ${{secrets.ATAR_PROJECT_ID_PROD}}
+          ATAR_CREDENTIALS: ${{secrets.ATAR_CREDENTIALS_PROD}}
+          IMAGE_NAME: gcr.io/${{secrets.ATAR_PROJECT_ID_PROD}}/authorizer
+
+  production-deploy:
+    needs: release-candidate
+    runs-on: ubuntu-latest
+    if: ${{ startsWith(github.ref, 'refs/heads/main') }}
+    environment: production
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{env.GITHUB_TOKEN}}
+    steps:
+      - name: Flow Deploy
+        uses: AtarB2B/github-deploy-k8s@main
+        with:
+          ATAR_PROJECT: ${{secrets.ATAR_PROJECT_ID_PROD}}
+          ATAR_CREDENTIALS: ${{secrets.ATAR_CREDENTIALS_PROD}}
+          IMAGE_NAME: gcr.io/${{secrets.ATAR_PROJECT_ID_PROD}}/authorizer
