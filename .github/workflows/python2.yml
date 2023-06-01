@@ -55,7 +55,7 @@ jobs:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
   
   hotfix:
-    if: ${{ startsWith(github.ref, 'refs/heads/hotfix') || startsWith(github.ref, 'refs/heads/main') }}
+    if: ${{ startsWith(github.ref, 'refs/heads/hotfix')}}
     # needs: sonar-scan
     runs-on: ubuntu-latest
     steps:
@@ -67,6 +67,7 @@ jobs:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
   
   hotfix-deploy:
+    if: ${{ startsWith(github.ref, 'refs/heads/hotfix')}}
     needs: hotfix
     runs-on: ubuntu-latest
     environment: qa
@@ -80,6 +81,24 @@ jobs:
         uses: AtarB2B/github-fc-deploy-workflow@python2
         with:
           DEPLOY_ENV: "dev"
+          SVC_NAME: ${{ github.event.repository.name }}
+          SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBS_BACKEND}}
+
+  hotfix-deploy-production:
+    if: ${{ startsWith(github.ref, 'refs/heads/main')}}
+    needs: hotfix
+    runs-on: ubuntu-latest
+    environment: qa
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{env.GITHUB_TOKEN}}
+    steps:
+      - name: Flow Deploy
+        uses: AtarB2B/github-fc-deploy-workflow@python2
+        with:
+          DEPLOY_ENV: "prod"
           SVC_NAME: ${{ github.event.repository.name }}
           SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBS_BACKEND}}
 
