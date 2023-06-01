@@ -130,7 +130,7 @@ jobs:
         password: ${{env.GITHUB_TOKEN}}
     steps:
       - name: Flow Deploy
-        uses: AtarB2B/github-create-tag-workflow@teste
+        uses: AtarB2B/github-create-tag-workflow@py2
         with:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
           DEPLOY_ENV: "dev"
@@ -149,7 +149,7 @@ jobs:
         password: ${{env.GITHUB_TOKEN}}
     steps:
       - name: Flow Deploy
-        uses: AtarB2B/github-create-tag-workflow@teste
+        uses: AtarB2B/github-create-tag-workflow@py2
         with:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
           DEPLOY_ENV: "prod-atar"
