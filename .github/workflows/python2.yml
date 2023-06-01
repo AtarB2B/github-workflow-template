@@ -55,7 +55,7 @@ jobs:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
   
   hotfix:
-    if: ${{ startsWith(github.ref, 'refs/heads/hotfix') }}
+    if: ${{ startsWith(github.ref, 'refs/heads/hotfix') || startsWith(github.ref, 'refs/heads/main') }}
     # needs: sonar-scan
     runs-on: ubuntu-latest
     steps:
