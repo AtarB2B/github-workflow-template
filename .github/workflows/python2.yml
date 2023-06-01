@@ -86,9 +86,8 @@ jobs:
 
   hotfix-deploy-production:
     if: ${{ startsWith(github.ref, 'refs/heads/main')}}
-    needs: hotfix
     runs-on: ubuntu-latest
-    environment: qa
+    environment: production-atar
     container:
       image: ghcr.io/atarb2b/deploy-devops:latest
       credentials:
