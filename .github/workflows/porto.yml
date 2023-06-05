@@ -30,7 +30,7 @@ jobs:
         uses: AtarB2B/github-deploy-porto@main
         with:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-          DEPLOY_TO: "legacy"
+          DEPLOY_TO: "app.yaml"
           SSH_PRIV_KEY_LIBS_BACKEND: ${{env.SSH_PRIV_KEY_LIBS_BACKEND}}
 
   porto-deploy:
@@ -47,5 +47,5 @@ jobs:
         uses: AtarB2B/github-deploy-porto@main
         with:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-          DEPLOY_TO: "prod-porto"
+          DEPLOY_TO: "app-prod-porto.yaml"
           SSH_PRIV_KEY_LIBS_BACKEND: ${{env.SSH_PRIV_KEY_LIBS_BACKEND}}
