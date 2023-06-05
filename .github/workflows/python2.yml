@@ -84,23 +84,6 @@ jobs:
           SVC_NAME: ${{ github.event.repository.name }}
           SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBS_BACKEND}}
 
-  hotfix-deploy-production:
-    if: ${{ startsWith(github.ref, 'refs/heads/main')}}
-    runs-on: ubuntu-latest
-    environment: production-atar
-    container:
-      image: ghcr.io/atarb2b/deploy-devops:latest
-      credentials:
-        username: ${{github.repository_owner}}
-        password: ${{env.GITHUB_TOKEN}}
-    steps:
-      - name: Flow Deploy
-        uses: AtarB2B/github-fc-deploy-workflow@python2
-        with:
-          DEPLOY_ENV: "prod"
-          SVC_NAME: ${{ github.event.repository.name }}
-          SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBS_BACKEND}}
-
   feature-deploy:
     needs: release-candidate
     runs-on: ubuntu-latest
