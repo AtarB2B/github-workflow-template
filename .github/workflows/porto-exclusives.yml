@@ -70,8 +70,9 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  deploy-dev:
+  deploy-atar:
     runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'main'}}
     container:
       image: ghcr.io/atarb2b/deploy-devops:latest
       credentials:
@@ -86,6 +87,7 @@ jobs:
     
   deploy-prod:
     runs-on: ubuntu-latest
+    if: ${{ github.ref_name == 'main'}}
     container:
       image: ghcr.io/atarb2b/deploy-devops:latest
       credentials:
