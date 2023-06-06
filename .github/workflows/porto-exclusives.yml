@@ -1,0 +1,100 @@
+name: "Continuous Integration"
+
+on:
+  workflow_call:
+
+env:
+  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}  
+  PORTO_PROJECT: ${{secrets.PORTO_PROJECT_ID_DEV}}
+  PORTO_CREDENTIALS: ${{secrets.PORTO_CREDENTIALS_PROD}}
+  ATAR_PROJECT: ${{secrets.ATAR_PROJECT_ID_DEV}}
+  ATAR_CREDENTIALS: ${{secrets.ATAR_CREDENTIALS_DEV}}
+  AUTHOR: '${{github.event.pusher.name}}\<${{github.event.pusher.email}}\>'
+  AUTHOR_URL: 'https://github.com/${{github.event.pusher.name}}'
+  SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+  RETRY: 'retry-cmd -i=60 --'
+
+jobs:
+  build:
+    name: Rodando testes unitários
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest faker coverage pytest-cov
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Test with pytest
+        run: |
+          pytest --ignore=app/main
+      - name: Test Coverage with pytest
+        run: |
+          pytest --ignore=app/main --cov-config=.coveragerc --cov-report=xml --doctest-modules --cov=. app/
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report
+          path: coverage.xml
+
+  sonarscan:
+    name: Analisando qualidade do código com SonarQube
+    needs: buildAndUnitTest
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Download code coverage results
+        uses: actions/download-artifact@v2
+
+      - name: 'Move coverage file to correct folder'
+        shell: bash
+        run: |
+          sed -i 's+/home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}+/github/workspace+g' code-coverage-report/coverage.xml
+      - uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-dev:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{secrets.GITHUB_TOKEN}}
+    steps:
+      - name: Flow Deploy
+        uses: AtarB2B/github-deploy-porto@exclusives
+        with:
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+          DEPLOY_TO: "atar"
+    
+  deploy-prod:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/atarb2b/deploy-devops:latest
+      credentials:
+        username: ${{github.repository_owner}}
+        password: ${{secrets.GITHUB_TOKEN}}
+    steps:
+      - name: Flow Deploy
+        uses: AtarB2B/github-deploy-porto@exclusives
+        with:
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+          DEPLOY_TO: "porto"
+    
