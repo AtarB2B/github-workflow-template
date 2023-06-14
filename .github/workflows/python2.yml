@@ -30,17 +30,17 @@ jobs:
       - name: Create feature candidate
         uses: AtarB2B/github-create-fc-workflow@main
   
-  # sonar-scan:
-  #   runs-on: ubuntu-latest
-  #   needs: create-feature-candidate
-  #   continue-on-error: true
-  #   steps:
-  #     - name: Run Sonar Scanner
-  #       uses: AtarB2B/github-sonar-scan-workflow@python2
-  #       with:
-  #         github-repo-name: ${{ github.event.repository.name }}
-  #         GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-  #         SONAR_TOKEN: ${{env.SONAR_TOKEN}}
+  sonar-scan:
+    runs-on: ubuntu-latest
+    needs: create-feature-candidate
+    continue-on-error: true
+    steps:
+      - name: Run Sonar Scanner
+        uses: AtarB2B/github-sonar-scan-workflow@python2
+        with:
+          github-repo-name: ${{ github.event.repository.name }}
+          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+          SONAR_TOKEN: ${{env.SONAR_TOKEN}}
   
   release-candidate:
     if: ${{ startsWith(github.ref, 'refs/heads/fc') }}
