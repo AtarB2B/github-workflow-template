@@ -130,7 +130,7 @@ jobs:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
           DEPLOY_ENV: "dev"
           SVC_NAME: ${{ github.event.repository.name }}
-          CREATE_RELEASE: "true"
+          CREATE_RELEASE: "false"
           SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
   
   prod-deploy:
@@ -149,7 +149,7 @@ jobs:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
           DEPLOY_ENV: "prod-atar"
           SVC_NAME: ${{ github.event.repository.name }}
-          CREATE_RELEASE: "false"
+          CREATE_RELEASE: "true"
           SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
 
   # prod-schedule-deploy:
