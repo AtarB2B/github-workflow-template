@@ -29,7 +29,7 @@ jobs:
         uses: InsonusK/get-latest-release@v1.0.1
         with:
           myToken: ${{env.GITHUB_TOKEN}}
-          exclude_types: "release"
+          exclude_types: "draft"
           view_top: 1
       
       - name: "Print result"
