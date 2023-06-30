@@ -53,20 +53,3 @@ jobs:
           echo "DRAFT ${{ steps.last_release.outputs.name }} = ${{ steps.last_release.outputs.tag_name }}"
           echo "RELEASE ${{ steps.last_release2.outputs.name }} = ${{ steps.last_release2.outputs.tag_name }}"
           echo "PRE-RELEASE ${{ steps.last_release3.outputs.name }} = ${{ steps.last_release3.outputs.tag_name }}"
-
-  # rc-deploy:
-  #   runs-on: ubuntu-latest
-  #   if: ${{ startsWith(github.ref, 'refs/heads/rc') }}
-  #   container:
-  #     image: ghcr.io/atarb2b/deploy-devops:latest
-  #     credentials:
-  #       username: ${{github.repository_owner}}
-  #       password: ${{env.GITHUB_TOKEN}}
-  #   steps:
-  #     - name: Flow Deploy
-  #       uses: AtarB2B/github-create-tag-workflow@main
-  #       with:
-  #         GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-  #         DEPLOY_ENV: "dev"
-  #         CREATE_RELEASE: "false"
-  #         SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
