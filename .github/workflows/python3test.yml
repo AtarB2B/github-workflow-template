@@ -30,7 +30,7 @@ jobs:
         with:
           myToken: ${{env.GITHUB_TOKEN}}
           exclude_types: "release"
-          view_top: 1
+          view_top: 100
       
       - name: "call action 2"
         id: last_release2
@@ -38,7 +38,7 @@ jobs:
         with:
           myToken: ${{env.GITHUB_TOKEN}}
           exclude_types: "prerelease"
-          view_top: 1
+          view_top: 100
 
       - name: "call action 3"
         id: last_release3
@@ -46,7 +46,7 @@ jobs:
         with:
           myToken: ${{env.GITHUB_TOKEN}}
           exclude_types: "draft"
-          view_top: 1
+          view_top: 100
 
       - name: "Print result"
         run: |
