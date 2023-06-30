@@ -24,22 +24,35 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       
-      - name: "call action"
+      - name: "call action 1"
         id: last_release
+        uses: InsonusK/get-latest-release@v1.0.1
+        with:
+          myToken: ${{env.GITHUB_TOKEN}}
+          exclude_types: "release"
+          view_top: 1
+      
+      - name: "call action 2"
+        id: last_release2
+        uses: InsonusK/get-latest-release@v1.0.1
+        with:
+          myToken: ${{env.GITHUB_TOKEN}}
+          exclude_types: "prerelease"
+          view_top: 1
+
+      - name: "call action 3"
+        id: last_release3
         uses: InsonusK/get-latest-release@v1.0.1
         with:
           myToken: ${{env.GITHUB_TOKEN}}
           exclude_types: "draft"
           view_top: 1
-      
+
       - name: "Print result"
         run: |
-          echo "id: ${{ steps.last_release.outputs.id }}"
-          echo "name: ${{ steps.last_release.outputs.name }}"
           echo "tag_name: ${{ steps.last_release.outputs.tag_name }}"
-          echo "created_at: ${{ steps.last_release.outputs.created_atd }}"
-          echo "draft: ${{ steps.last_release.outputs.draft }}"
-          echo "prerelease: ${{ steps.last_release.outputs.prerelease }}"
+          echo "tag_name: ${{ steps.last_release2.outputs.tag_name }}"
+          echo "tag_name: ${{ steps.last_release3.outputs.tag_name }}"
 
   # rc-deploy:
   #   runs-on: ubuntu-latest
