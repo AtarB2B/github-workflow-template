@@ -18,38 +18,42 @@ env:
   RETRY: "retry -l -i=60s -c=3"
 
 jobs:
-  
-  rc-deploy:
+  test:
     runs-on: ubuntu-latest
     if: ${{ startsWith(github.ref, 'refs/heads/rc') }}
-    container:
-      image: ghcr.io/atarb2b/deploy-devops:latest
-      credentials:
-        username: ${{github.repository_owner}}
-        password: ${{env.GITHUB_TOKEN}}
     steps:
-      - name: Flow Deploy
-        uses: AtarB2B/github-create-tag-workflow@main
+      - uses: actions/checkout@v1
+      
+      - name: "call action"
+        id: last_release
+        uses: InsonusK/get-latest-release@v1.0.1
         with:
-          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-          DEPLOY_ENV: "dev"
-          CREATE_RELEASE: "false"
-          SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
-  
-  prod-deploy:
-    runs-on: ubuntu-latest
-    environment: production-atar
-    if: ${{ startsWith(github.ref, 'refs/heads/main') }}
-    container:
-      image: ghcr.io/atarb2b/deploy-devops:latest
-      credentials:
-        username: ${{github.repository_owner}}
-        password: ${{env.GITHUB_TOKEN}}
-    steps:
-      - name: Flow Deploy
-        uses: AtarB2B/github-create-tag-workflow@main
-        with:
-          GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-          DEPLOY_ENV: "prod-atar"
-          CREATE_RELEASE: "true"
-          SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
+          myToken: ${{ github.token }}
+          exclude_types: "release"
+          view_top: 1
+      
+      - name: "Print result"
+        run: |
+          echo "id: ${{ steps.last_release.outputs.id }}"
+          echo "name: ${{ steps.last_release.outputs.name }}"
+          echo "tag_name: ${{ steps.last_release.outputs.tag_name }}"
+          echo "created_at: ${{ steps.last_release.outputs.created_atd }}"
+          echo "draft: ${{ steps.last_release.outputs.draft }}"
+          echo "prerelease: ${{ steps.last_release.outputs.prerelease }}"
+
+  # rc-deploy:
+  #   runs-on: ubuntu-latest
+  #   if: ${{ startsWith(github.ref, 'refs/heads/rc') }}
+  #   container:
+  #     image: ghcr.io/atarb2b/deploy-devops:latest
+  #     credentials:
+  #       username: ${{github.repository_owner}}
+  #       password: ${{env.GITHUB_TOKEN}}
+  #   steps:
+  #     - name: Flow Deploy
+  #       uses: AtarB2B/github-create-tag-workflow@main
+  #       with:
+  #         GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
+  #         DEPLOY_ENV: "dev"
+  #         CREATE_RELEASE: "false"
+  #         SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
