@@ -52,7 +52,6 @@ jobs:
 
   sonarscan:
     name: Analisando qualidade do código com SonarQube
-    needs: buildAndUnitTest
     runs-on: ubuntu-latest
     steps:
 
