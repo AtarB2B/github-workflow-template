@@ -50,9 +50,9 @@ jobs:
 
       - name: "Print result"
         run: |
-          echo "DRAFT = ${{ steps.last_release.outputs.tag_name }}"
-          echo "RELEASE = ${{ steps.last_release2.outputs.tag_name }}"
-          echo "PRE-RELEASE = ${{ steps.last_release3.outputs.tag_name }}"
+          echo "DRAFT ${{ steps.last_release.outputs.name }} = ${{ steps.last_release.outputs.tag_name }}"
+          echo "RELEASE ${{ steps.last_release2.outputs.name }} = ${{ steps.last_release2.outputs.tag_name }}"
+          echo "PRE-RELEASE ${{ steps.last_release3.outputs.name }} = ${{ steps.last_release3.outputs.tag_name }}"
 
   # rc-deploy:
   #   runs-on: ubuntu-latest
