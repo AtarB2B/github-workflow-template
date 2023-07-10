@@ -129,7 +129,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
           DEPLOY_ENV: "dev"
-          CREATE_RELEASE: "prerelease"
+          CREATE_RELEASE: "false"
           SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
           PROMOTE: "--promote"
   
@@ -148,7 +148,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
           DEPLOY_ENV: "prod-atar"
-          CREATE_RELEASE: "prerelease"
+          CREATE_RELEASE: "false"
           SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
           PROMOTE: "--no-promote"
   
@@ -167,6 +167,6 @@ jobs:
         with:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
           DEPLOY_ENV: "prod-atar"
-          CREATE_RELEASE: "release"
+          CREATE_RELEASE: "true"
           SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
           PROMOTE: "--promote"
