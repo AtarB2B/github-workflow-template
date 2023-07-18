@@ -149,7 +149,7 @@ jobs:
         uses: AtarB2B/github-create-tag-workflow@minimal
         with:
           GITHUB_TOKEN: ${{env.GITHUB_TOKEN}}
-          DEPLOY_ENV: "prod-atar"
+          DEPLOY_ENV: "prod"
           CREATE_RELEASE: "false"
           SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
           PROMOTE: "--no-promote"
