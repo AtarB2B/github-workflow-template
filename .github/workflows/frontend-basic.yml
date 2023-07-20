@@ -35,7 +35,7 @@ jobs:
       - name: Run Unit Tests
         uses: AtarB2B/github-unit-tests-workflow@frontend-basic
         with:
-          SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_LIBRARY}}
+          SSH_PRIV_KEY_LIBRARY: ${{secrets.SSH_PRIV_KEY_TOOLING}}
 
   sonar-scan:
     runs-on: ubuntu-latest
