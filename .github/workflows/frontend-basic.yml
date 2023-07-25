@@ -30,6 +30,11 @@ jobs:
   
   unit-test:
     runs-on: ubuntu-latest
+    
+    permissions:
+      packages: write
+      contents: read
+
     if: startsWith(github.ref, 'refs/heads/feature') != true
     steps:
       - name: Run Unit Tests
