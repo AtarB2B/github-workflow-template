@@ -42,7 +42,6 @@ jobs:
         uses: AtarB2B/github-unit-tests-workflow@main
         with:
           SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
-          ARTIFACT_CREDENTIALS: ${{env.ATARB2B_API_CREDENTIALS_PROD}}
   
   sonar-scan:
     runs-on: ubuntu-latest
