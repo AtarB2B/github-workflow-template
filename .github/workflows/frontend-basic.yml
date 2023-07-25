@@ -36,6 +36,7 @@ jobs:
         uses: AtarB2B/github-unit-tests-workflow@frontend-basic
         with:
           SSH_PRIV_KEY_TOOLING: ${{secrets.SSH_PRIV_KEY_TOOLING}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   sonar-scan:
     runs-on: ubuntu-latest
