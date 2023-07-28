@@ -35,10 +35,6 @@ jobs:
     steps:
       - name: Run Unit Tests
         uses: AtarB2B/github-unit-tests-workflow@frontend-basic
-        # with:
-        #   ATAR_PROJECT: ${{secrets.ATARB2B_API_PROJECT_ID_PROD}}
-        #   ATAR_CREDENTIALS: ${{secrets.ATARB2B_API_CREDENTIALS_PROD}}
-        #   ARTIFACT_LOCATION: southamerica-east1
 
   sonar-scan:
     runs-on: ubuntu-latest
