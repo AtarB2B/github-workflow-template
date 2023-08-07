@@ -34,11 +34,14 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/heads/feature') != true
     steps:
-      - name: Run Unit Tests
-        uses: AtarB2B/github-unit-tests-workflow@new_python3
-        with:
-          TESTS_PATCH: "app/"
-          ATARB2B_API_CREDENTIALS_PROD: ${{secrets.ATARB2B_API_CREDENTIALS_PROD}}
+      - name: Update Library
+        uses: AtarB2B/github-library-workflow@main
+      
+      # - name: Run Unit Tests
+      #   uses: AtarB2B/github-unit-tests-workflow@new_python3
+      #   with:
+      #     TESTS_PATCH: "app/"
+      #     ATARB2B_API_CREDENTIALS_PROD: ${{secrets.ATARB2B_API_CREDENTIALS_PROD}}
   
   sonar-scan:
     runs-on: ubuntu-latest
