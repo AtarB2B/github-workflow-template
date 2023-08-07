@@ -35,8 +35,8 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/heads/feature') != true
     steps:
-      # - name: Update Library
-      #   uses: AtarB2B/github-library-workflow@main
+      - name: Update Library
+        uses: AtarB2B/github-library-workflow@main
       
       - name: Run Unit Tests
         uses: AtarB2B/github-unit-tests-workflow@new_python3
