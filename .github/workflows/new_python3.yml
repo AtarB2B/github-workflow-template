@@ -36,14 +36,13 @@ jobs:
     if: startsWith(github.ref, 'refs/heads/feature') != true
     # continue-on-error: true
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Update Library
+        uses: AtarB2B/github-library-workflow@main
+
       - name: Run Unit Tests
         uses: AtarB2B/github-unit-tests-workflow@new_python3
         with:
           TESTS_PATCH: "tests/"
-          USE_LIBRARY: "true"
-          SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
   
   sonar-scan:
     runs-on: ubuntu-latest
