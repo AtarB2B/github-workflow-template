@@ -15,8 +15,6 @@ env:
   ATAR_PROJECT_DEV: ${{secrets.ATAR_PROJECT_ID_DEV}}
   ATAR_CREDENTIALS_DEV: ${{secrets.ATAR_CREDENTIALS_DEV}}
 
-  ATARB2B_API_CREDENTIALS_PROD: ${{secrets.ATARB2B_API_CREDENTIALS_PROD}}
-
   RETRY: "retry -l -i=60s -c=3"
 
 jobs:
@@ -35,15 +33,12 @@ jobs:
   unit-test:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/heads/feature') != true
-    # continue-on-error: true
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Run Unit Tests
         uses: AtarB2B/github-unit-tests-workflow@new_python3
         with:
           TESTS_PATCH: "app/"
-          USE_LIBRARY: "true"
+          ATARB2B_API_CREDENTIALS_PROD: ${{secrets.ATARB2B_API_CREDENTIALS_PROD}}
   
   sonar-scan:
     runs-on: ubuntu-latest
