@@ -15,7 +15,7 @@ env:
   ATAR_PROJECT_DEV: ${{secrets.ATAR_PROJECT_ID_DEV}}
   ATAR_CREDENTIALS_DEV: ${{secrets.ATAR_CREDENTIALS_DEV}}
   ATARB2B_API_CREDENTIALS_PROD: ${{secrets.ATARB2B_API_CREDENTIALS_PROD}}
-  
+
   RETRY: "retry -l -i=60s -c=3"
 
 jobs:
@@ -35,14 +35,13 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/heads/feature') != true
     steps:
-      - name: Update Library
-        uses: AtarB2B/github-library-workflow@main
+      # - name: Update Library
+      #   uses: AtarB2B/github-library-workflow@main
       
-      # - name: Run Unit Tests
-      #   uses: AtarB2B/github-unit-tests-workflow@new_python3
-      #   with:
-      #     TESTS_PATCH: "app/"
-      #     ATARB2B_API_CREDENTIALS_PROD: ${{secrets.ATARB2B_API_CREDENTIALS_PROD}}
+      - name: Run Unit Tests
+        uses: AtarB2B/github-unit-tests-workflow@new_python3
+        with:
+          TESTS_PATCH: "app/"
   
   sonar-scan:
     runs-on: ubuntu-latest
