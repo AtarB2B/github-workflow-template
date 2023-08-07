@@ -41,8 +41,7 @@ jobs:
         uses: AtarB2B/github-unit-tests-workflow@new_python3
         with:
           TESTS_PATCH: "app/"
-          USE_LIBRARY: "false"
-          SSH_PRIV_KEY_LIBRARY: ${{env.SSH_PRIV_KEY_LIBRARY}}
+          USE_LIBRARY: "true"
   
   sonar-scan:
     runs-on: ubuntu-latest
