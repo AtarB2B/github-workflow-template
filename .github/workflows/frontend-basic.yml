@@ -100,7 +100,7 @@ jobs:
         password: ${{env.GITHUB_TOKEN}}
     steps:
       - name: Flow Deploy
-        uses: AtarB2B/github-fc-deploy-workflow@frontend
+        uses: AtarB2B/github-fc-deploy-workflow@frontend-minimal
         with:
           DEPLOY_ENV: "dev"
           SVC_NAME: ${{ github.event.repository.name }}
